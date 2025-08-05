@@ -39,8 +39,24 @@ const addImageWatermarkToImage = async function (
   await image.quality(100).writeAsync(outputFile);
 };
 
-addImageWatermarkToImage(
-  './test.jpg',
-  './test-with-watermark2.jpg',
-  './logo.png'
-);
+// addImageWatermarkToImage(
+//   './test.jpg',
+//   './test-with-watermark2.jpg',
+//   './logo.png'
+// );
+
+process.stdout.write('Type "E" to exit, typ "H" to say hello ');
+process.stdin.on('readable', () => {
+  const input = process.stdin.read();
+
+  const instruction = input.toString().trim();
+
+  if (instruction === 'E') {
+    process.stdout.write('Exiting app...');
+    process.exit();
+  } else if (instruction === 'H') {
+    process.stdout.write('Hi! How are you?');
+  } else {
+    process.stdout.write('Wrong instruction!\n');
+  }
+});
