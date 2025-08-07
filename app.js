@@ -19,6 +19,9 @@ const addTextWatermarkToImage = async function (inputFile, outputFile, text) {
 
     image.print(font, 0, 0, textData, image.getWidth(), image.getHeight());
     await image.quality(100).writeAsync(outputFile);
+
+    console.log('Success!!! We added watermark text');
+    startApp();
   } catch (err) {
     console.log(err.message);
   }
@@ -46,6 +49,9 @@ const addImageWatermarkToImage = async function (
     });
 
     await image.quality(100).writeAsync(outputFile);
+
+    console.log('Success!!! We added watermark image');
+    startApp();
   } catch (err) {
     console.log(err.message);
   }
