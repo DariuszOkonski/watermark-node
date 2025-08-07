@@ -15,12 +15,6 @@ const addTextWatermarkToImage = async function (inputFile, outputFile, text) {
   await image.quality(100).writeAsync(outputFile);
 };
 
-// addTextWatermarkToImage(
-//   './test.jpg',
-//   './test-with-watermark.jpg',
-//   'Hello World'
-// );
-
 const addImageWatermarkToImage = async function (
   inputFile,
   outputFile,
@@ -39,12 +33,6 @@ const addImageWatermarkToImage = async function (
 
   await image.quality(100).writeAsync(outputFile);
 };
-
-// addImageWatermarkToImage(
-//   './test.jpg',
-//   './test-with-watermark2.jpg',
-//   './logo.png'
-// );
 
 const startApp = async () => {
   const answer = await inquirer.prompt([
@@ -74,8 +62,6 @@ const startApp = async () => {
     },
   ]);
 
-  console.log('options: ', options);
-
   if (options.watermarkType === 'Text watermark') {
     const text = await inquirer.prompt([
       {
@@ -91,7 +77,21 @@ const startApp = async () => {
       options.watermarkText
     );
   } else {
-    // TODO: write this part
+    const image = await inquirer.prompt([
+      {
+        name: 'filename',
+        type: 'input',
+        message: 'Type your watermark name:',
+        default: 'logo.png',
+      },
+    ]);
+    options.watermarkImage = image.filename;
+    addImageWatermarkToImage(
+      './img/',
+      options.inputImage,
+      './test-with-watermark.jpg',
+      './img/' + options.watermarkImage
+    );
   }
 };
 
