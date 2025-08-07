@@ -1,18 +1,27 @@
 const inquirer = require('inquirer');
 const Jimp = require('jimp');
+const { existsSync } = require('node:fs');
 
 const addTextWatermarkToImage = async function (inputFile, outputFile, text) {
-  const image = await Jimp.read(inputFile);
-  const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
+  try {
+    if (!existsSync(inputFile)) {
+      throw new Error('Something went wrong... Try again');
+    }
 
-  const textData = {
-    text,
-    alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-    alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
-  };
+    const image = await Jimp.read(inputFile);
+    const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
 
-  image.print(font, 0, 0, textData, image.getWidth(), image.getHeight());
-  await image.quality(100).writeAsync(outputFile);
+    const textData = {
+      text,
+      alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+      alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
+    };
+
+    image.print(font, 0, 0, textData, image.getWidth(), image.getHeight());
+    await image.quality(100).writeAsync(outputFile);
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 const addImageWatermarkToImage = async function (
