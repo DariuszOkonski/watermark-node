@@ -29,18 +29,26 @@ const addImageWatermarkToImage = async function (
   outputFile,
   watermarkFile
 ) {
-  const image = await Jimp.read(inputFile);
-  const watermark = await Jimp.read(watermarkFile);
+  try {
+    if (!existsSync(inputFile) || !existsSync(watermarkFile)) {
+      throw new Error('Something went wrong... Try again');
+    }
 
-  const x = image.getWidth() / 2 - watermark.getWidth() / 2;
-  const y = image.getHeight() / 2 - watermark.getHeight() / 2;
+    const image = await Jimp.read(inputFile);
+    const watermark = await Jimp.read(watermarkFile);
 
-  image.composite(watermark, x, y, {
-    mode: Jimp.BLEND_SOURCE_OVER,
-    opacitySource: 0.5,
-  });
+    const x = image.getWidth() / 2 - watermark.getWidth() / 2;
+    const y = image.getHeight() / 2 - watermark.getHeight() / 2;
 
-  await image.quality(100).writeAsync(outputFile);
+    image.composite(watermark, x, y, {
+      mode: Jimp.BLEND_SOURCE_OVER,
+      opacitySource: 0.5,
+    });
+
+    await image.quality(100).writeAsync(outputFile);
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 const prepareOutputFilename = function (filename) {
