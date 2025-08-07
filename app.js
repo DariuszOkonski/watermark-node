@@ -34,6 +34,11 @@ const addImageWatermarkToImage = async function (
   await image.quality(100).writeAsync(outputFile);
 };
 
+const prepareOutputFilename = function (filename) {
+  const [name, ext] = filename.split('.');
+  return `${name}-with-watermark.${ext}`;
+};
+
 const startApp = async () => {
   const answer = await inquirer.prompt([
     {
@@ -73,7 +78,7 @@ const startApp = async () => {
     options.watermarkText = text.value;
     addTextWatermarkToImage(
       './img/' + options.inputImage,
-      './test-with-watermark.jpg',
+      './img/' + prepareOutputFilename(options.inputImage),
       options.watermarkText
     );
   } else {
@@ -87,9 +92,8 @@ const startApp = async () => {
     ]);
     options.watermarkImage = image.filename;
     addImageWatermarkToImage(
-      './img/',
-      options.inputImage,
-      './test-with-watermark.jpg',
+      './img/' + options.inputImage,
+      './img/' + prepareOutputFilename(options.inputImage),
       './img/' + options.watermarkImage
     );
   }
